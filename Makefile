@@ -12,7 +12,7 @@ export DOCKER_REGISTRY_PASSWD
 
 .PHONY: $(CONTAINERS)
 $(CONTAINERS):
-	cd $@; $(DOCKER) build --pull --tag "$(DOCKER_REPO)/$@"
+	cd $@; $(DOCKER) build --pull --tag "$(DOCKER_REPO)/$@" .
 ifneq (,$(PUSH))
 	echo $$DOCKER_REGISTRY_PASSWD | $(DOCKER) login -u $(DOCKER_USER) --password-stdin $(DOCKER_REGISTRY)
 	$(DOCKER) push "$(DOCKER_REPO)/$@"
