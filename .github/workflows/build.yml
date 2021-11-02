@@ -31,6 +31,8 @@ jobs:
         with:
           files: |
             ^${{ matrix.container }}/
+            ^.github/workflows/build.yml$
+            ^Makefile$
 
       - name: Build container image (and publish if allowed)
         if: >
