@@ -1,0 +1,41 @@
+name: build
+
+on:
+  push:
+    branches:
+      - docker
+      - master
+  schedule:
+    - cron: '48 2 6,16,26 * *'
+
+jobs:
+  container-build:
+    name: container-${{ matrix.container }}
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        container:
+          - graphviz-dot
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 2
+
+      - name: Allow publishing this image
+        if: github.ref == 'refs/heads/master'
+        run: echo "PUSH=yes" >> $GITHUB_ENV
+
+      - name: Detect which files were modified after previous commit
+        id: changed-files
+        uses: tj-actions/changed-files@v11.5
+        with:
+          files: |
+            ^${{ matrix.container }}/
+
+      - name: Build container image (and publish if allowed)
+        if: >
+          steps.changed-files.outputs.any_changed == 'true' ||
+          github.event_name == 'schedule'
+        run: make ${{ matrix.container }}
+        env:
+          DOCKER_REGISTRY_PASSWD: ${{ secrets.CONTAINER_REGISTRY_PERSONAL_ACCESS_TOKEN }}
