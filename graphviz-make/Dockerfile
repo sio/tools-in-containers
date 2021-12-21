@@ -10,5 +10,6 @@ RUN \
         python3 \
         python3-venv \
         make \
+        curl \
         && \
     apt-get clean
