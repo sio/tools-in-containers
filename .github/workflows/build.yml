@@ -28,7 +28,7 @@ jobs:
 
       - name: Detect which files were modified after previous commit
         id: changed-files
-        uses: tj-actions/changed-files@v11.5
+        uses: tj-actions/changed-files@v41
         with:
           files: |
             ^${{ matrix.container }}/
